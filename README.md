@@ -1,166 +1,85 @@
-# Olist E-Commerce Analytics Pipeline: From Raw Data to Strategic Insights
+# Olist E-Commerce Analytics: From Data to Strategy 📊
 
-A reproducible, zero-dependency SQL analytics pipeline built natively on PostgreSQL, delivering strategic insights from raw CSVs to localized executive reports in under 10 minutes.
+A professional Streamlit-powered analytics application that transforms raw transactional data from Brazilian e-commerce into interactive business intelligence.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![PostgreSQL 15](https://img.shields.io/badge/postgresql-15-blue.svg)](https://www.postgresql.org/)
-
----
-
-### 🎥 Live Dashboard Demo / Architecture Run-through
-
-*(Recording available on request)*
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.24+-red.svg)](https://streamlit.io/)
+[![Plotly](https://img.shields.io/badge/Plotly-5.0+-orange.svg)](https://plotly.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
 
 ---
 
-### 🚀 About the Project
+## 🚀 Executive Summary (STAR Method)
 
-*   **Situation:** Olist, a Brazilian e-commerce integration platform, operates a complex marketplace connecting independent merchants to major consumer storefronts.
-*   **Task:** The business needed to understand the core drivers of revenue, identify logistical bottlenecks (SLA failures), mitigate customer churn, and correlate seller performance to actual customer satisfaction scores.
-*   **Action:** This project implements an end-to-end, SQL-first analytics engineering pipeline. It transforms anonymized raw transactional data into structured semantic views and programmatically outputs analytical visualizations.
-*   **Result:** Stakeholders receive reproducible, decision-ready notebooks containing descriptive analytics, rule-based segmentations, and operational risk matrices.
-
----
-
-### ⭐ Key Features
-
-| Feature | Implementation | Description |
-| :--- | :--- | :--- |
-| **Reproducible Runtime** | Docker (`Dockerfile`) | A minimal, ephemeral PostgreSQL container eliminating dependency conflicts. |
-| **Strict Data Quality** | SQL Asserts (`sql/tests/`) | Pre-analysis execution blocks validating primary keys, orphan records, and metric sanity. |
-| **Virtualized Logic** | SQL Views (`sql/views/`) | Window functions and cohort math isolated into safe semantic views, preventing ad-hoc mapping errors. |
-| **Programmatic Execution** | Python / Pandas | Pure SQL logic routed dynamically into executable scripts for data extraction and graphical rendering. |
-| **Compiled Notebooks** | `rebuild_notebooks.py` | Notebooks are built deterministically from Python source scripts and Markdown reports, solving JSON merge conflicts. |
+- **Situation:** Olist operates a massive marketplace in Brazil, managing high-volume transactions, logistics, and customer feedback. Stakeholders lacked a unified, interactive tool to visualize performance drivers and identify operational risks.
+- **Task:** Transition from static, script-based analysis to a professional web-based dashboard that provides real-time KPIs, interactive visualizations, and dynamic business recommendations.
+- **Action:** Developed a layered architecture (PostgreSQL -> Core Data Layer -> Streamlit UI). Refactored SQL logic into a cached data provider and implemented interactive charts using Plotly Express for drill-down capabilities.
+- **Result:** Delivered a decision-ready executive dashboard that highlights revenue peaks, categories with the highest growth, and regional logistics bottlenecks, enabling data-driven strategic planning for the C-suite.
 
 ---
 
-### 🏛 Architecture Overview
+## ⚙️ Quick Start
 
-The pipeline enforces a strict separation of concerns across directory layers:
-
-
-analysis/
-│   ├── notebooks/              # Compiled Jupyter notebooks (.ipynb)
-│   ├── reports/                # Markdown files containing executive conclusions
-│   └── utils/                  # Python utilities (DB connections, SQL parsers plot styling)
-├── data/
-│   └── raw/olist/              # [Ignored] Required directory for raw source CSVs
-├── docs/                       # Process documentation and execution runbook
-├── scripts/
-│   ├── cells/                  # Python scripts containing charting and DataFrame logic
-│   ├── rebuild_notebooks.py    # Compiler generating .ipynb files from scripts/ and reports/
-│   ├── run_pipeline.sh         # Orchestrator for DDL, ingestion, assertions, and view creation
-│   └── validate_notebooks.py   # Verifies notebook output structure completeness
-├── sql/
-│   ├── analysis/               # Declarative queries answering specific business questions
-│   ├── ddl/                    # Target schemas, table definitions, and index constraints
-│   ├── load/                   # psql \copy commands for bulk CSV ingestion
-│   ├── tests/                  # Assertions validating referential integrity and metric bounds
-│   └── views/                  # Semantic layer encapsulating joins and window functions
-├── Dockerfile                  # Minimal PostgreSQL container definition
-└── requirements.txt            # Python dependencies for the reporting layer
-
-
-#### Layer Responsibilities
-
-1.  **SQL Ingestion:** `\copy` routines for speed, wrapped by strict DDL primary/foreign keys.
-2.  **SQL Semantic Layer:** Virtual views managing complex joins, coalescing rules, and standardizing nomenclature.
-3.  **SQL Validation:** Zero-row assertion testing before views are queried.
-4.  **Python Orchestration:** Bash loops and Python execution scripts to move data from Postgres to Pandas without mutating the source truth.
-5.  **Notebooks / Reporting:** Jupyter JSON generated predictably through `rebuild_notebooks.py`.
-
----
-
-### ⚙ Execution Model
-
-This project relies on a strict separation of logic and presentation:
-
-1.  **Analytical logic** lives exclusively in `sql/analysis/`.
-2.  **Charting logic** lives exclusively in `scripts/cells/`.
-3.  **Narrative conclusions** live exclusively in `analysis/reports/`.
-4.  **Jupyter Notebooks (`.ipynb`)** in this repository are **compiled artifacts**. They are generated by `scripts/rebuild_notebooks.py`.
-
-> **Important:** Do NOT manually edit the `.ipynb` files. Any changes made directly in Jupyter will be overwritten upon the next compilation. All edits should occur within the `scripts/cells/` or `analysis/reports/` directories.
-
----
-
-### 🛠 Getting Started
-
-The entire pipeline is designed for a local turnaround time under 10 minutes.
-
-**1. Populate Raw Data**
-Ensure your local `data/raw/olist/*.csv` files are populated. (Data available via public Olist Kaggle datasets).
-
-**2. Configure Environment**
+### 1. Prerequisite Setup
+Ensure your local environment is configured with PostgreSQL and the Olist dataset:
 ```bash
+# Clone the repo and install dependencies
+pip install -r requirements.txt
+
+# Configure your database env
 cp analysis/.env.example analysis/.env
 ```
 
-**3. Spin up the Database Environment**
-The volume mount connects the host data directory to the container for `\copy` execution.
+### 2. Seed Data
+If you haven't run the pipeline yet, initialize the database:
 ```bash
-docker run --name olist_pg \
-  -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=olist \
-  -p 5432:5432 \
-  -v "$(pwd)/data:/project/data" \
-  -d postgres:15-alpine
-```
-
-**4. Initialize the Pipeline**
-Run the core automation script to construct tables, load CSVs, test quality, and build views.
-```bash
-chmod +x scripts/run_pipeline.sh
 ./scripts/run_pipeline.sh
 ```
 
-**5. Render and Analyze**
-Configure Python, compile the notebooks, and run Jupyter:
+### 3. One-Click Launch
+Start the web application directly from the root:
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-python scripts/rebuild_notebooks.py
-python scripts/validate_notebooks.py
-
-jupyter notebook analysis/notebooks/
+python start_analysis.py
 ```
 
 ---
 
-### 📊 Usage Examples & Expected Outputs
+## 🏛 Technical Architecture
 
-Executing the notebooks produces analytical synthesis across five business domains:
+The project follows a strict three-tier architecture to ensure maintainability and separation of concerns:
 
-1.  **Gross Revenue & AOV Trends** (`01_revenue_and_aov.ipynb`)
-    *   *Output:* A 4-panel dashboard showing trailing revenue, AOV curves, category scaling, and geographical concentration.
-2.  **Cohort Analysis & Retention Rates** (`02_cohorts_and_retention.ipynb`)
-    *   *Output:* Month-1 retention decay curves and cumulative LTV by acquisition cohort.
-3.  **Logistics SLA Delays by Geography** (`03_delivery_sla_performance.ipynb`)
-    *   *Output:* Actual vs. ETA operational gaps and normalized delay exposure per state.
-4.  **Drivers of 1-Star Customer Reviews** (`04_review_score_drivers.ipynb`)
-    *   *Output:* The statistical penalty imposed by delivery delays versus raw product quality.
-5.  **Payment Method Cancellations** (`05_payment_type_behavior.ipynb`)
-    *   *Output:* Revenue share distribution and explicit correlation between specific payment types and cancellation risk.
+```mermaid
+graph TD
+    subgraph UI_Layer[Streamlit UI Layer]
+        Main[src/main.py] --> Dashboard[src/ui/dashboard.py]
+    end
+    
+    subgraph Core_Layer[Business Logic Layer]
+        Dashboard --> DP[src/core/data_provider.py]
+        DP -- "st.cache_data" --> Logic[SQL Logic]
+    end
+    
+    subgraph Data_Layer[Data Infrastructure]
+        DP --> DB[src/core/db_client.py]
+        DB --> Postgres[(PostgreSQL)]
+    end
+```
 
-Data Quality validation outputs cleanly in the terminal during step 4; any failing SQL assertion returns a row count and immediately terminates the `run_pipeline.sh` script.
+- **Persistence Layer**: Raw data ingestion into PostgreSQL.
+- **Logic Layer**: Python-based data provider utilizing `st.cache_data` to minimize DB overhead.
+- **Presentation Layer**: Modular Streamlit components and Plotly charts.
 
 ---
 
-### 📝 Developer Notes & Design Decisions
+## 🛠 Features
 
-*   **Under-the-Hood SQL Modeling:** This pipeline is intentionally built bare-metal (PostgreSQL + Bash) to demonstrate a fundamental understanding of modeling, deterministic testing, and semantic abstraction. It explicitly rejects abstraction tools like dbt to prove comprehension of the underlying architectural primitives.
-*   **Zero-Dependency Setup:** Complex orchestration frameworks (Airflow/Prefect) are omitted to guarantee a frictionless, `<10 minute` verification for external technical reviewers.
-*   **Rule-Based Segmentation over ML:** Customer segmentations (e.g., LTV tiers, outlier detection) utilize descriptive statistics (Tukey IQR fences, percentile cuts) rather than ML models (like K-Means) to ensure outputs are perfectly deterministic, reproducible, and easily explainable to business stakeholders.
-*   **Known Limitations:** True net profitability remains an explicit blindspot due to missing Cost of Goods Sold (COGS) and marketing overhead data.
+- **Dynamic KPI Cards**: Instant tracking of Revenue, AOV, and Order Volume with period-over-period deltas.
+- **Interactive Visualizations**: Zoomable revenue trends and regional GMV distribution maps.
+- **Executive Summary**: Real-time business insights generated via dynamic Python logic.
+- **One-Click Deployment**: Simplified launch sequence for developers and analysts.
 
 ---
 
-### ✉️ Author & Contact
-
-Designed and implemented as a zero-dependency, SQL-first Analytics Engineering pipeline.
-
-*   **Author:** Andrew Shwarts
-*   **LinkedIn:** [linkedin.com/in/andrewshwarts](https://linkedin.com/in/andrewshwarts)
-*   **Email:** ashwarts@example.com
+## ✉️ Author
+**Andrew Shwarts**  
+[LinkedIn](https://linkedin.com/in/andrewshwarts) | [Portfolio](https://example.com)

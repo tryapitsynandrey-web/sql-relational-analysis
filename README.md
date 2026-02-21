@@ -39,25 +39,28 @@ A reproducible, zero-dependency SQL analytics pipeline built natively on Postgre
 
 The pipeline enforces a strict separation of concerns across directory layers:
 
-```text
-├── analysis/
-│   ├── notebooks/              # Compiled Jupyter notebooks
-│   ├── reports/                # Source of truth for executive conclusions (Markdown)
-│   └── utils/                  # DB connections, plotting, and SQL loaders
-├── data/raw/olist/             # [Ignored] Required directory for raw CSVs
-├── docs/                       # Auxiliary documentation (Runbook)
+
+analysis/
+│   ├── notebooks/              # Compiled Jupyter notebooks (.ipynb)
+│   ├── reports/                # Markdown files containing executive conclusions
+│   └── utils/                  # Python utilities (DB connections, SQL parsers plot styling)
+├── data/
+│   └── raw/olist/              # [Ignored] Required directory for raw source CSVs
+├── docs/                       # Process documentation and execution runbook
 ├── scripts/
-│   ├── cells/                  # Source of truth for notebook Python dashboard logic
-│   ├── rebuild_notebooks.py    # Notebook compiler
-│   ├── run_pipeline.sh         # End-to-end orchestration
-│   └── validate_notebooks.py   # Notebook structure validator
-└── sql/
-    ├── ddl/                    # Target schema, data types, and performance indexes
-    ├── load/                   # psql \copy commands streaming CSVs to memory
-    ├── tests/                  # Assertions halting pipeline on data corruption
-    ├── views/                  # Semantic layer abstracting physical tables
-    └── analysis/               # Declarative queries answering business questions
-```
+│   ├── cells/                  # Python scripts containing charting and DataFrame logic
+│   ├── rebuild_notebooks.py    # Compiler generating .ipynb files from scripts/ and reports/
+│   ├── run_pipeline.sh         # Orchestrator for DDL, ingestion, assertions, and view creation
+│   └── validate_notebooks.py   # Verifies notebook output structure completeness
+├── sql/
+│   ├── analysis/               # Declarative queries answering specific business questions
+│   ├── ddl/                    # Target schemas, table definitions, and index constraints
+│   ├── load/                   # psql \copy commands for bulk CSV ingestion
+│   ├── tests/                  # Assertions validating referential integrity and metric bounds
+│   └── views/                  # Semantic layer encapsulating joins and window functions
+├── Dockerfile                  # Minimal PostgreSQL container definition
+└── requirements.txt            # Python dependencies for the reporting layer
+
 
 #### Layer Responsibilities
 

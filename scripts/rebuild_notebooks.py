@@ -64,7 +64,7 @@ def _notebook(cells: list[dict]) -> dict:
                 "language": "python",
                 "name": "python3",
             },
-            "language_info": {"name": "python", "version": "3.11.0"},
+            "language_info": {"name": "python"},
         },
         "cells": cells,
     }
@@ -92,10 +92,8 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-import matplotlib.patches as mpatches
 from IPython.display import display
 
 _REPO_ROOT = Path().resolve().parents[1]

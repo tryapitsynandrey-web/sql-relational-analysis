@@ -102,12 +102,28 @@ run_sql "Add constraints"        "sql/ddl/03_add_constraints.sql"
 
 # ---------------------------------------------------------------------------
 # Step 4: Data Quality Validation
+# Each test query must return 0 rows. Non-zero output means a DQ assertion failed.
 # ---------------------------------------------------------------------------
 section "Step 4 of 5 — Data Quality Tests"
-run_sql "Nulls & duplicates"     "sql/tests/01_validation_nulls_and_duplicates.sql"
-run_sql "Referential integrity"  "sql/tests/02_validation_referential_integrity.sql"
-run_sql "Metric sanity"          "sql/tests/03_validation_metric_sanity.sql"
-echo "  ✓ All data quality assertions passed"
+
+run_sql_test() {
+    local label="$1"
+    local file="$2"
+    echo "  → $label"
+    local row_count
+    # Run the SQL and count result rows (excluding potential psql header/footer lines).
+    row_count=$($PSQL -d "$DB_NAME" -f "$REPO_ROOT/$file" --tuples-only --no-align 2>&1 | grep -c '.' || true)
+    if [[ "$row_count" -gt 0 ]]; then
+        echo "  ✗ FAILED: $label returned $row_count unexpected row(s)."
+        echo "    Run manually to inspect: psql -d $DB_NAME -f $REPO_ROOT/$file"
+        exit 1
+    fi
+    echo "  ✓ Passed: $label"
+}
+
+run_sql_test "Nulls & duplicates"     "sql/tests/01_validation_nulls_and_duplicates.sql"
+run_sql_test "Referential integrity"  "sql/tests/02_validation_referential_integrity.sql"
+run_sql_test "Metric sanity"          "sql/tests/03_validation_metric_sanity.sql"
 
 # ---------------------------------------------------------------------------
 # Step 5: Semantic Layer (Views)

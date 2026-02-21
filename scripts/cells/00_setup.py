@@ -18,10 +18,6 @@ suite_labels = [
     "Metric Sanity Checks",
 ]
 
-# Expected row count for every test query: 0 means the assertion passes.
-# A non-zero result means the test detected a data quality violation.
-EXPECTED_ZERO_ROWS = True
-
 results = []  # list of dicts: {suite, query_idx, label, rows, passed}
 
 with get_connection() as conn:

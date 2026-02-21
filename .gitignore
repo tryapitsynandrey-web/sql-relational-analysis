@@ -1,7 +1,30 @@
+# Raw source data (large CSVs not tracked in git)
 data/raw/
 data/interim/
 data/processed/
 
+# Local environment credentials
+.env
+analysis/.env
+
+# OS artefacts
 .DS_Store
+
+# Python artefacts
 __pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
 .venv/
+
+# Jupyter checkpoint files
+.ipynb_checkpoints/
+
+# Generated figure output (re-created on each pipeline run)
+analysis/figures/*.png
+analysis/figures/*.svg
+analysis/figures/*.pdf

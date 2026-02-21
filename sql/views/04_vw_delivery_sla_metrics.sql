@@ -7,13 +7,13 @@ SELECT
     order_id,
     customer_id,
     order_status,
-    -- Calculate Actual Delivery Time (Days)
+    -- Elapsed days from purchase to customer receipt; NULL for undelivered orders.
     EXTRACT(EPOCH FROM (order_delivered_customer_date - order_purchase_timestamp))/86400.0 as actual_delivery_days,
-    -- Calculate Estimated Delivery Time (Days)
+    -- Days from purchase to the promised delivery date; used as the SLA baseline.
     EXTRACT(EPOCH FROM (order_estimated_delivery_date - order_purchase_timestamp))/86400.0 as estimated_delivery_days,
-    -- Calculate Delay (Positive means delayed, Negative means early)
+    -- Positive values indicate SLA breach; negative values indicate early delivery.
     EXTRACT(EPOCH FROM (order_delivered_customer_date - order_estimated_delivery_date))/86400.0 as delay_vs_estimate_days,
-    -- Boolean flags for SLA grouping
+    -- Boolean SLA flag; TRUE when customer received the order after the committed date.
     CASE 
         WHEN order_delivered_customer_date > order_estimated_delivery_date THEN true
         ELSE false

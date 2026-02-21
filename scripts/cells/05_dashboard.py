@@ -1,6 +1,7 @@
 # =============================================================================
 # Dashboard 05 — Payment Type Behavior & Cancellation Risk
 # =============================================================================
+import matplotlib.patches as mpatches  # Required for legend patch labels in panel E
 fig = plt.figure(figsize=(18, 14))
 fig.suptitle(
     "Olist Payment Method Behavior & Cancellation Risk Dashboard",

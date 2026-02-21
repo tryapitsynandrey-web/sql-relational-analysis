@@ -1,3 +1,13 @@
+"""
+Notebook structure validator for the Olist analytics pipeline.
+
+Verifies that every ``.ipynb`` file in ``analysis/notebooks/`` contains
+the three mandatory executive conclusion sections and that all code cells
+are syntactically valid Python. Exits with code 1 if any notebook fails.
+
+Run from the repository root:
+    python scripts/validate_notebooks.py
+"""
 from pathlib import Path
 import json
 import ast
@@ -9,7 +19,7 @@ REQUIRED_SECTIONS = [
     "Actionable Recommendations",
 ]
 
-def validate_notebook(nb_path: Path):
+def validate_notebook(nb_path: Path) -> list[str]:
     with nb_path.open(encoding="utf-8") as f:
         nb = json.load(f)
 

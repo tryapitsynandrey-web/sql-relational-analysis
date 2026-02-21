@@ -129,36 +129,3 @@ def save_figure(fig: Figure, filename: str) -> Path:
     fig.savefig(output_path)
     return output_path
 
-
-def format_currency_axis(ax: plt.Axes, axis: str = "y") -> None:
-    """
-    Format an axis with comma-separated integer values (e.g. 1,000,000).
-
-    Parameters
-    ----------
-    ax : matplotlib.axes.Axes
-        Target axes object.
-    axis : {'x', 'y'}
-        Which axis to format.  Default is ``'y'``.
-    """
-    formatter = mticker.FuncFormatter(lambda x, _: f"{x:,.0f}")
-    if axis == "y":
-        ax.yaxis.set_major_formatter(formatter)
-    else:
-        ax.xaxis.set_major_formatter(formatter)
-
-
-def rotate_xlabels(ax: plt.Axes, rotation: int = 45, ha: str = "right") -> None:
-    """
-    Rotate x-axis tick labels to prevent overlap.
-
-    Parameters
-    ----------
-    ax : matplotlib.axes.Axes
-        Target axes object.
-    rotation : int
-        Label rotation angle in degrees.  Default is 45.
-    ha : str
-        Horizontal alignment.  Default is ``'right'``.
-    """
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=rotation, ha=ha)

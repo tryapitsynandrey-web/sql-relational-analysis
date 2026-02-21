@@ -1,2 +1,24 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# -------------------------------
+# Explicit language classification
+# -------------------------------
+
+*.sql linguist-language=SQL
+*.py linguist-language=Python
+*.ipynb linguist-language=Jupyter Notebook
+Makefile linguist-language=Makefile
+
+# -------------------------------
+# Exclude non-source directories
+# -------------------------------
+
+.venv/** linguist-vendored
+.pytest_cache/** linguist-vendored
+data/** linguist-vendored
+logs/** linguist-vendored
+exports/** linguist-vendored
+
+# -------------------------------
+# Documentation and metadata
+# -------------------------------
+
+*.md linguist-documentation

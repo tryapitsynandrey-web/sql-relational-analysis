@@ -1,25 +1,20 @@
-# Payment Type Behavior Report
+# Payment Method Behavior & Cancellation Risk Analysis — Conclusions
 
-## Executive Summary
-- Credit cards dominate the volume of both orders and absolute payment value.
-- Payment installment preferences suggest a price-sensitive consumer base.
-- Vouchers/Boletos feature a unique and elevated correlation with order abandonment/cancellation.
-- Credit infrastructure is currently the lifeblood of the scaling GMV.
-- Alternate payments (debit) remain drastically underutilized.
+---
 
-## Key Metrics
-| Metric | Status / Trend |
-| --- | --- |
-| Dominant Payment | Credit Card |
-| Highest Cancellation | Voucher/Boleto |
+## Key Findings
+- Credit card transactions dominate the platform, constituting the overwhelming majority of both order volume and total GMV.
+- Average transaction values are noticeably higher for credit card payments compared to alternative methods.
+- The boleto (voucher) payment method suffers from an order cancellation rate drastically higher than the baseline average.
+- Installment payments using credit cards are standard behavior across all mid-to-high ticket purchases.
+- Debit card and alternative vouchers capture negligible shares of total transaction volume.
 
-## Findings
-`05_payment_usage.png` indicates that the platform's survival is tied overwhelmingly to successful credit authorization. Conversely, `05_payment_cancellation.png` details exactly how high friction asynchronous payments (like Boleto) result in drastically higher unfulfilled endpoints. 
+## Business Implications
+- Extreme reliance on the credit card network creates a single-point-of-failure risk at the revenue collection layer.
+- Boleto cancellations systematically inflate top-of-funnel conversion metrics with intent-to-buy actions that ultimately generate zero revenue.
+- Revenue growth in high-AOV categories is structurally dependent on the continued availability of flexible installment financing.
 
-## Business Recommendations
-1. Analyze the Boleto funnel to identify if the cancellation is driven by friction, fraud, or buyer remorse.
-2. Incentivize direct debit or immediate payment gateways to reduce payment-pending limbo.
-3. Guarantee robust redundancy for the platform's active credit card gateways to prevent catastrophic downtime.
-
-## Assumptions & Limitations
-- Cancellation logic is based solely on final state and doesn't unpack sequential payment drop-offs natively.
+## Actionable Recommendations
+- Implement secondary, automated redundant routing for the primary credit card payment gateway to mitigate outage risks.
+- Monitor the boleto cancellation rate explicitly as pseudo-abandoned cart volume rather than deliberate buyer-regret cancellations.
+- Adjust checkout UX to aggressively incentivize immediate, digital payment methods over asynchronous voucher options.

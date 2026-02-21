@@ -1,26 +1,20 @@
-# Delivery SLA Performance Report
+# Delivery SLA Performance & Geographic Delay Analysis — Conclusions
 
-## Executive Summary
-- A material slice of the aggregate order base misses shipping deadlines.
-- SLA defaults actively drive down customer confidence.
-- Geographic routing heavily dictates the probability of a shipment delay.
-- Baseline SLA estimations provided to customers may be fundamentally flawed.
-- Logistical distance compounds existing delays exponentially.
+---
 
-## Key Metrics
-| Metric | Status / Trend |
-| --- | --- |
-| Global Delay Rate | Significant |
-| Avg Delay (Days) | High Variance |
+## Key Findings
+- A material proportion of total deliveries fail to meet their customer-facing estimated delivery dates.
+- Average actual delivery days structurally exceed estimated delivery days at the national level.
+- Delay rates exhibit substantial variance across geographic states, independent of their delivery volume.
+- The states producing the highest volume of deliveries also operate with delay rates above the national median.
+- Normalised delivery risk (delayed orders per 1,000 deliveries) reveals risk burdens misaligned with raw delay percentages.
 
-## Findings
-Captured in `03_sla_pie.png`, a sizable percentage of deliveries act in violation of their SLA targets. Furthermore, `03_delay_by_state.png` correlates geographic boundaries with compounding delay likelihoods, suggesting routing to specific regions fundamentally breaks the current logistics framework. 
+## Business Implications
+- The persistent negative gap between actual and estimated delivery times indicates a systematic failure in ETA calculation methodology rather than isolated carrier issues.
+- Geographic concentration of delays damages the customer experience most sharply in the platform's highest-revenue regions.
+- Applying uniform SLA standards nationally obscures severe underperformance in specific, high-exposure operational corridors.
 
-## Business Recommendations
-1. Recalibrate the front-end SLA estimation engine to pad dates for historically delayed regions.
-2. Review carrier contracts in the most heavily impacted destination states.
-3. Implement proactive customer outreach when orders miss the shipping hub deadline.
-
-## Assumptions & Limitations
-- Assuming the carrier transfer events are recorded accurately in the backend database.
-- Missing timestamps default to logical boolean categorizations.
+## Actionable Recommendations
+- Adjust customer-facing ETA calculations per state using observed median actual delivery days to immediately eliminate broken delivery promises.
+- Prioritize regional carrier contract negotiations and operational reviews for the states combining high volume with above-median delay rates.
+- Establish distinct, tiered SLA targets for logistics partners based on historical state-level transit times.

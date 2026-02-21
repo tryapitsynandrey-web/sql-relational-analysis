@@ -1,27 +1,20 @@
-# Revenue & AOV Analysis Report
+# Revenue, AOV & Geographic GMV Analysis — Conclusions
 
-## Executive Summary
-- Overall revenue has experienced robust historical scaling.
-- Average Order Value (AOV) remains largely flat despite aggregate revenue spikes.
-- Product catalog heavily concentrates GMV within the top 10 core categories.
-- Geographic distribution mirrors revenue concentration.
-- Macro seasonality impacts purchasing volume significantly.
+---
 
-## Key Metrics
-| Metric | Status / Trend |
-| --- | --- |
-| Total Monthly Revenue | Upward |
-| Average Order Value | Stable |
-| Top Category Concentration | High |
+## Key Findings
+- Total platform revenue shows consistent positive growth over the evaluated timeline.
+- A single pronounced revenue peak is observable, interrupting the otherwise steady growth trend.
+- Average Order Value (AOV) remains structurally flat despite the significant growth in order volume and total revenue.
+- A small cluster of core product categories generates the vast majority of total GMV.
+- Geographic GMV generation is heavily concentrated in the top 4 states (SP, RJ, MG, RS).
 
-## Findings
-As visualized in `01_revenue_trend.png`, monthly sales output forms a consistent upward arc across the dataset lifecycle. `01_top_categories.png` highlights that despite thousands of items, top sellers control the majority slice of revenue generation. AOV stability implies volume, not cart expansion, drives growth. 
+## Business Implications
+- Revenue growth is entirely driven by new customer acquisition and order volume, exposing the platform to acquisition saturation risks.
+- The flat AOV indicates that up-selling and cross-selling mechanics are underperforming or non-existent in the purchase flow.
+- Geographic revenue concentration amplifies the commercial impact of regional logistics disruptions or competitor campaigns.
 
-## Business Recommendations
-1. Focus marketing capital on the highest-grossing categories to amplify natural demand.
-2. Introduce bundling strategies to attempt to shift the stagnant AOV metric upward.
-3. Target logistics infrastructure improvements in the highest GMV states to support volume.
-
-## Assumptions & Limitations
-- Assumes historical data accurately reflects future seasonal buying patterns.
-- Excludes canceled or unavailable order states.
+## Actionable Recommendations
+- Standardize promotional mechanics targeting higher-value bundles or minimum-spend thresholds to artificially lift AOV.
+- Prioritize operational and marketing resource allocation toward expanding the customer base in the current top 4 states.
+- Monitor category saturation levels within the highest-GMV product sectors to predict impending growth plateaus.
